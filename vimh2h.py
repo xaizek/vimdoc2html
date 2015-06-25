@@ -139,8 +139,9 @@ class VimH2H(object):
                 if pipeword is not None:
                     out.append(self.maplink(pipeword, 'l'))
                 elif starword is not None:
-                    out.extend(('<a name="', urllib.quote_plus(starword),
-                            '" class="t">', html_escape[starword], '</a>'))
+                    quoted = urllib.quote_plus(starword)
+                    out.extend(('<a name="', quoted, '" href="#', quoted,
+                                '" class="t">', html_escape[starword], '</a>'))
                 elif command is not None:
                     out.extend(('<span class="e">', html_escape[command],
                                 '</span>'))
