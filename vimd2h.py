@@ -3,6 +3,9 @@
 
 # converts vim documentation to html
 
+# Based on https://github.com/c4rlo/vimhelp/blob/master/vimh2h.py
+# by Carlo Teubner <(first name) dot (last name) at gmail dot com>.
+
 import re, urllib
 from itertools import chain
 
@@ -60,7 +63,7 @@ class Link(object):
         self.link_pipe = link_pipe
         self.link_plain = link_plain
 
-class VimH2H(object):
+class VimDoc2HTML(object):
     def __init__(self, tags, version=None):
         self._urls = { }
         self._version = version
@@ -69,11 +72,6 @@ class VimH2H(object):
             if m:
                 tag, filename = m.group(1, 2)
                 self.do_add_tag(filename, tag)
-
-    def add_tags(self, filename, contents):
-        for match in RE_STARTAG.finditer(contents):
-            tag = match.group(1).replace('\\', '\\\\').replace('/', '\\/')
-            self.do_add_tag(str(filename), tag)
 
     def do_add_tag(self, filename, tag):
         part1 = '<a href="#' + \
@@ -100,12 +98,10 @@ class VimH2H(object):
                     '</span>'
         else: return html_escape[tag]
 
-    def to_html(self, filename, contents, encoding, web_version=True):
+    def to_html(self, contents):
         out = [ ]
 
         inexample = 0
-        filename = str(filename)
-        is_help_txt = (filename == 'help.txt')
         for line in RE_NEWLINE.split(contents):
             line = line.rstrip('\r\n')
             line_tabs = line
@@ -184,18 +180,3 @@ class HtmlEscCache(dict):
         return r
 
 html_escape = HtmlEscCache()
-
-import io
-import os
-
-in_file = io.FileIO('tags')
-tags = in_file.read()
-in_file.close()
-
-hhh = VimH2H(tags)
-
-in_file = io.FileIO('vifm.txt')
-content = in_file.read()
-in_file.close()
-
-print hhh.to_html('vifm.txt', content, 'utf-8', False)
