@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 #
-# Copyright (C) 2014 xaizek <xaizek@openmailbox.org>
+# Copyright (C) 2014 xaizek <xaizek@posteo.net>
 #
 # This file is part of vimdoc2html.
 #
