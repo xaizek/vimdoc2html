@@ -50,7 +50,7 @@ TEMPLATE = u'''\
 script_dir = path.dirname(path.realpath(__file__))
 
 # parse command-line arguments
-parser = argparse.ArgumentParser( description=__doc__)
+parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-r', '--raw', dest='raw', action='store_true',
                     help="Don't wrap output into template")
 parser.add_argument('vimdoc', nargs=1, help='Vim documentation file')
