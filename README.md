@@ -12,13 +12,13 @@ This is a script to convert Vim documentation file into HTML.
 The basic usage is:
 
 ```bash
-./vimh2h.py plugin.txt
+./vimd2h.py plugin.txt
 ```
 
 or if the script is somewhere in the `$PATH`:
 
 ```bash
-vimh2h.py plugin.txt
+vimd2h.py plugin.txt
 ```
 
 The only "advanced" usage is currently enabled by `-r` or `--raw` flag, in which
