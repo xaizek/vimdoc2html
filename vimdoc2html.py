@@ -27,6 +27,7 @@ As part of the process, tags file is created at the location of the source file.
 """
 
 import argparse
+import io
 import os
 import os.path as path
 import subprocess
@@ -63,18 +64,18 @@ src_dir = path.dirname(src_filename) or '.'
 subprocess.call([path.join(script_dir, 'helpztags'), src_dir])
 
 # read in all external files
-with file(path.join(src_dir, 'tags'), 'r') as tags_file:
+with io.open(path.join(src_dir, 'tags'), 'r') as tags_file:
     tags = tags_file.read()
-with file(src_filename, 'r') as doc_file:
+with io.open(src_filename, 'r') as doc_file:
     contents = doc_file.read()
-with file(path.join(script_dir, 'vimhelp.css'), 'r') as css_file:
+with io.open(path.join(script_dir, 'vimhelp.css'), 'r') as css_file:
     style = css_file.read()
 
 # produce formatted html
 html = vimd2h.VimDoc2HTML(tags).to_html(contents)
 
 # output result
-with file('%s.html' % src_filename, 'w') as html_file:
+with io.open('%s.html' % src_filename, 'w') as html_file:
     if raw_output:
         html_file.write(html)
     else:

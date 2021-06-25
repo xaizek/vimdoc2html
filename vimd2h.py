@@ -6,8 +6,13 @@
 # Based on https://github.com/c4rlo/vimhelp/blob/master/vimh2h.py
 # by Carlo Teubner <(first name) dot (last name) at gmail dot com>.
 
-import re, urllib
+import re
 from itertools import chain
+
+try:
+    import urllib.parse as urllib
+except:
+    import urllib
 
 RE_TAGLINE = re.compile(r'(\S+)\s+(\S+)')
 
