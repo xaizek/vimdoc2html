@@ -80,6 +80,6 @@ with io.open('%s.html' % src_filename, 'w') as html_file:
         html_file.write(html)
     else:
         html_file.write(
-                TEMPLATE.format(title=unicode(path.basename(src_filename)),
+                TEMPLATE.format(title=path.basename(src_filename),
                                 style=style,
-                                html=html));
+                                html=html))
