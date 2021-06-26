@@ -63,19 +63,23 @@ src_dir = path.dirname(src_filename) or '.'
 # generate tags file
 subprocess.call([path.join(script_dir, 'helpztags'), src_dir])
 
+tags_path = path.join(src_dir, 'tags')
+css_path = path.join(script_dir, 'vimhelp.css')
+html_path = '%s.html' % src_filename;
+
 # read in all external files
-with io.open(path.join(src_dir, 'tags'), 'r') as tags_file:
+with io.open(tags_path, 'r', encoding='utf-8') as tags_file:
     tags = tags_file.read()
-with io.open(src_filename, 'r') as doc_file:
+with io.open(src_filename, 'r', encoding='utf-8') as doc_file:
     contents = doc_file.read()
-with io.open(path.join(script_dir, 'vimhelp.css'), 'r') as css_file:
+with io.open(css_path, 'r', encoding='utf-8') as css_file:
     style = css_file.read()
 
 # produce formatted html
 html = vimd2h.VimDoc2HTML(tags).to_html(contents)
 
 # output result
-with io.open('%s.html' % src_filename, 'w') as html_file:
+with io.open(html_path, 'w', encoding='utf-8') as html_file:
     if raw_output:
         html_file.write(html)
     else:
