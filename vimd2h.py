@@ -99,6 +99,9 @@ class VimDoc2HTML(object):
             if css_class == 'l': return links.link_pipe
             else: return links.link_plain
         elif css_class is not None:
+            if css_class == 'l':
+                print('Unresolved reference: |%s|' % tag)
+
             return '<span class="' + css_class + '">' + html_escape[tag] + \
                     '</span>'
         else: return html_escape[tag]
