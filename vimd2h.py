@@ -71,6 +71,7 @@ class Link(object):
 class VimDoc2HTML(object):
     def __init__(self, tags, version=None):
         self._urls = { }
+        self._urlsCI = { }
         self._version = version
         for line in RE_NEWLINE.split(tags):
             m = RE_TAGLINE.match(line)
@@ -92,6 +93,7 @@ class VimDoc2HTML(object):
             elif special is not None: classattr = ' class="s"'
         link_plain = part1 + classattr + part2
         self._urls[tag] = Link(link_pipe, link_plain)
+        self._urlsCI[tag.lower()] = True
 
     def maplink(self, tag, css_class=None):
         links = self._urls.get(tag)
@@ -100,7 +102,14 @@ class VimDoc2HTML(object):
             else: return links.link_plain
         elif css_class is not None:
             if css_class == 'l':
-                print('Unresolved reference: |%s|' % tag)
+                lowerTag = tag.lower()
+                if lowerTag in self._urlsCI:
+                    print('Unresolved reference: |%s|' % tag)
+                    for key in self._urls:
+                        if key.lower() == lowerTag:
+                            print('  - tag with different case: |%s|' % key)
+                else:
+                    print('Unresolved reference: |%s|' % tag)
 
             return '<span class="' + css_class + '">' + html_escape[tag] + \
                     '</span>'
