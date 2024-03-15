@@ -3,7 +3,7 @@
 
 # converts vim documentation to html
 
-# Based on https://github.com/c4rlo/vimhelp/blob/master/vimh2h.py
+# Based on https://github.com/c4rlo/vimhelp/blob/b0cab7cbac937cdda156efce0fa4d1b1d4b30ff6/vimh2h.py
 # by Carlo Teubner <(first name) dot (last name) at gmail dot com>.
 
 import re
