@@ -47,6 +47,7 @@ TEMPLATE = u'''\
     </body>
 </html>\
 '''
+template = TEMPLATE
 
 script_dir = path.dirname(path.realpath(__file__))
 
@@ -54,6 +55,8 @@ script_dir = path.dirname(path.realpath(__file__))
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-r', '--raw', dest='raw', action='store_true',
                     help="Don't wrap output into template")
+parser.add_argument('-t', '--template',
+                    help="template file (overrides builtin template)")
 parser.add_argument('vimdoc', nargs=1, help='Vim documentation file')
 args = parser.parse_args()
 raw_output = args.raw
@@ -74,6 +77,9 @@ with io.open(src_filename, 'r', encoding='utf-8') as doc_file:
     contents = doc_file.read()
 with io.open(css_path, 'r', encoding='utf-8') as css_file:
     style = css_file.read()
+if args.template is not None:
+    with io.open(args.template, 'r', encoding='utf-8') as template_file:
+        template = template_file.read()
 
 # produce formatted html
 html = vimd2h.VimDoc2HTML(tags).to_html(contents)
@@ -84,6 +90,6 @@ with io.open(html_path, 'w', encoding='utf-8') as html_file:
         html_file.write(html)
     else:
         html_file.write(
-                TEMPLATE.format(title=path.basename(src_filename),
+                template.format(title=path.basename(src_filename),
                                 style=style,
                                 html=html))
