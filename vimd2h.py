@@ -15,6 +15,7 @@ except:
     import urllib
 
 RE_TAGLINE = re.compile(r'(\S+)\s+(\S+)')
+RE_LINE1_HELP = re.compile(r'^\*\S+\*\s.*')
 
 PAT_WORDCHAR = '[!#-)+-{}~\xC0-\xFF]'
 
@@ -29,7 +30,7 @@ PAT_SPECIAL  = r'(<.*?>|\{.*?}|' \
                r'\[(?:range|line|count|offset|\+?cmd|[-+]?num|\+\+opt|' \
                r'arg|arguments|ident|addr|group)]|' \
                r'(?<=\s)\[[-a-z^A-Z0-9_]{2,}])'
-PAT_TITLE    = r'(Vim version [0-9.a-z]+|VIM REFERENCE.*)'
+PAT_VIM_REF  = r'(Vim version [0-9.a-z]+|VIM REFERENCE.*)'
 PAT_NOTE     = r'((?<!' + PAT_WORDCHAR + r')(?:note|NOTE|Notes?):?' \
                  r'(?!' + PAT_WORDCHAR + r'))'
 PAT_URL      = r'((?:https?|ftp)://[^\'"<> \t]+[a-zA-Z0-9/])'
@@ -49,7 +50,7 @@ RE_TAGWORD = re.compile(
         PAT_OPTWORD  + '|' +
         PAT_CTRL     + '|' +
         PAT_SPECIAL  + '|' +
-        PAT_TITLE    + '|' +
+        PAT_VIM_REF  + '|' +
         PAT_NOTE     + '|' +
         PAT_URL      + '|' +
         PAT_WORD)
@@ -119,8 +120,13 @@ class VimDoc2HTML(object):
         out = [ ]
 
         inexample = 0
+        lineno = 0
         for line in RE_NEWLINE.split(contents):
+            lineno += 1
             line = line.rstrip('\r\n')
+            line1_help = lineno == 1 and RE_LINE1_HELP.match(line)
+            if line1_help:
+                out.append('<span class="flh">')
             line_tabs = line
             line = line.expandtabs()
             if RE_HRULE.match(line):
@@ -148,7 +154,7 @@ class VimDoc2HTML(object):
                     out.append(html_escape[line[lastpos:pos]])
                 lastpos = match.end()
                 header, graphic, pipeword, starword, command, opt, ctrl, \
-                        special, title, note, url, word = match.groups()
+                        special, vimref, note, url, word = match.groups()
                 if pipeword is not None:
                     out.append(self.maplink(pipeword, 'l'))
                 elif starword is not None:
@@ -164,8 +170,8 @@ class VimDoc2HTML(object):
                     out.append(self.maplink(ctrl, 'k'))
                 elif special is not None:
                     out.append(self.maplink(special, 's'))
-                elif title is not None:
-                    out.extend(('<span class="i">', html_escape[title],
+                elif vimref is not None:
+                    out.extend(('<span class="i">', html_escape[vimref],
                                 '</span>'))
                 elif note is not None:
                     out.extend(('<span class="n">', html_escape[note],
@@ -182,6 +188,8 @@ class VimDoc2HTML(object):
                     out.append(self.maplink(word))
             if lastpos < len(line):
                 out.append(html_escape[line[lastpos:]])
+            if line1_help:
+                out.append('</span>')
             out.append('\n')
             if inexample == 1: inexample = 2
 
