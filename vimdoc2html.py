@@ -55,6 +55,8 @@ script_dir = path.dirname(path.realpath(__file__))
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('-r', '--raw', dest='raw', action='store_true',
                     help="Don't wrap output into template")
+parser.add_argument('-o', '--output',
+                    help="output HTML file")
 parser.add_argument('-t', '--template',
                     help="template file (overrides builtin template)")
 parser.add_argument('vimdoc', nargs=1, help='Vim documentation file')
@@ -68,7 +70,7 @@ subprocess.call([path.join(script_dir, 'helpztags'), src_dir])
 
 tags_path = path.join(src_dir, 'tags')
 css_path = path.join(script_dir, 'vimhelp.css')
-html_path = '%s.html' % src_filename;
+html_path = args.output if args.output is not None else '%s.html' % src_filename
 
 # read in all external files
 with io.open(tags_path, 'r', encoding='utf-8') as tags_file:
