@@ -5,13 +5,6 @@ body { font-family: georgia, palatino, serif }
 
 pre { font-size: 11pt }
 
-#d1 { position: relative; display: table; margin: 0 auto }
-#d2 { position: absolute; top: inherit }
-
-#sp { visibility: hidden; height: 1px; margin: 0 }
-
-#footer { font-size: 85%; padding-top: 1em }
-
 /* hidden links */
 a.d:link, a.d:visited { color: rgb(0,0,0); text-decoration: none; }
 a.d:active, a.d:hover { color: rgb(0,0,0); text-decoration: underline; }
