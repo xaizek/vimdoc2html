@@ -23,7 +23,7 @@ PAT_HEADER   = r'(^.*~$)'
 PAT_GRAPHIC  = r'(^.* `$)'
 PAT_PIPEWORD = r'(?<!\\)\|([#-)!+-~]+)\|'
 PAT_STARWORD = r'\*([#-)!+-~]+)\*(?:(?=\s)|$)'
-PAT_COMMAND  = r'`([^` ]+)`'
+PAT_COMMAND  = r'`([^`]+)`'
 PAT_OPTWORD  = r"('(?:[a-z]{2,}|t_..)')"
 PAT_CTRL     = r'(CTRL-(?:W_)?(?:[\w\[\]^+-<>=@]|<[A-Za-z]+?>)?)'
 PAT_SPECIAL  = r'(<.*?>|\{.*?}|' \
