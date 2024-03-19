@@ -72,7 +72,7 @@ class Link(object):
 class VimDoc2HTML(object):
     def __init__(self, tags, version=None):
         self._urls = { }
-        self._urlsCI = { }
+        self._urlsCI = { }  # lowercased tag -> set of cased versions
         self._urlsUnresolved = set()
         self._version = version
         for line in RE_NEWLINE.split(tags):
@@ -95,7 +95,11 @@ class VimDoc2HTML(object):
             elif special is not None: classattr = ' class="s"'
         link_plain = part1 + classattr + part2
         self._urls[tag] = Link(link_pipe, link_plain)
-        self._urlsCI[tag.lower()] = True
+        lowerTag = tag.lower()
+        if lowerTag in self._urlsCI:
+            self._urlsCI[lowerTag].add(tag)
+        else:
+            self._urlsCI[lowerTag] = set((tag,))
 
     def maplink(self, tag, css_class=None):
         links = self._urls.get(tag)
@@ -109,9 +113,8 @@ class VimDoc2HTML(object):
                     lowerTag = tag.lower()
                     if lowerTag in self._urlsCI:
                         print('Unresolved reference: |%s|' % tag)
-                        for key in self._urls:
-                            if key.lower() == lowerTag:
-                                print('  - tag with different case: |%s|' % key)
+                        for okTag in self._urlsCI[lowerTag]:
+                            print('  - tag with different case: |%s|' % okTag)
                     else:
                         print('Unresolved reference: |%s|' % tag)
 
