@@ -73,6 +73,7 @@ class VimDoc2HTML(object):
     def __init__(self, tags, version=None):
         self._urls = { }
         self._urlsCI = { }
+        self._urlsUnresolved = set()
         self._version = version
         for line in RE_NEWLINE.split(tags):
             m = RE_TAGLINE.match(line)
@@ -103,14 +104,16 @@ class VimDoc2HTML(object):
             else: return links.link_plain
         elif css_class is not None:
             if css_class == 'l':
-                lowerTag = tag.lower()
-                if lowerTag in self._urlsCI:
-                    print('Unresolved reference: |%s|' % tag)
-                    for key in self._urls:
-                        if key.lower() == lowerTag:
-                            print('  - tag with different case: |%s|' % key)
-                else:
-                    print('Unresolved reference: |%s|' % tag)
+                if tag not in self._urlsUnresolved:
+                    self._urlsUnresolved.add(tag)
+                    lowerTag = tag.lower()
+                    if lowerTag in self._urlsCI:
+                        print('Unresolved reference: |%s|' % tag)
+                        for key in self._urls:
+                            if key.lower() == lowerTag:
+                                print('  - tag with different case: |%s|' % key)
+                    else:
+                        print('Unresolved reference: |%s|' % tag)
 
             return '<span class="' + css_class + '">' + html_escape[tag] + \
                     '</span>'
