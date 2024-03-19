@@ -17,7 +17,8 @@ except:
 RE_TAGLINE = re.compile(r'(\S+)\s+(\S+)')
 RE_LINE1_HELP = re.compile(r'^\*\S+\*\s.*')
 
-PAT_WORDCHAR = '[!#-)+-{}~\xC0-\xFF]'
+# grab an ASCII table and carefully note what the embedded X-Y ranges exclude
+PAT_WORDCHAR = '[!#-)+-_a-{}~\xC0-\xFF]'
 
 PAT_HEADER   = r'(^.*~$)'
 PAT_GRAPHIC  = r'(^.* `$)'
