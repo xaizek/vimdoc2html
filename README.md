@@ -21,10 +21,39 @@ or if the script is somewhere in the `$PATH`:
 vimdoc2html.py plugin.txt
 ```
 
-The only "advanced" usage is currently enabled by `-r` or `--raw` flag, in which
-case instead of outputting complete standalone HTML page only minimal output is
-produced.  This way after customizing style/template only the contents can be
-replaced.
+#### Options ####
+
+##### `-o,--output path` option
+
+Specifies name of the output file.  The default behaviour is to derive it from
+the name of the input file by appending `.html`.
+
+##### `-r,--raw` flag
+
+Instead of outputting complete standalone HTML page, produce only minimal
+output without `<html>`/`<head>`/`<body>`/`<pre>` tags.
+
+##### `-t,--template path` option
+
+Overrides builtin template.  The following sequences will be expanded:
+ - `{title}` with the name of the source file
+ - `{style}` with the contents of `vimhelp.css`
+ - `{html}` with documentation formatted as HTML
+
+Default template is trivial:
+```html
+<html>
+    <head>
+        <title>{title}</title>
+        <style>{style}</style>
+    </head>
+    <body>
+        <pre>
+        {html}
+        </pre>
+    </body>
+</html>
+```
 
 ### Credit ###
 
