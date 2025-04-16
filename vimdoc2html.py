@@ -59,11 +59,19 @@ parser.add_argument('-o', '--output',
                     help="output HTML file")
 parser.add_argument('-t', '--template',
                     help="template file (overrides builtin template)")
+parser.add_argument('-m', '--map', dest='url_map', action='append', default=[],
+                    metavar='FILE=URL', help="maps tag's filename to a URL")
 parser.add_argument('vimdoc', nargs=1, help='Vim documentation file')
 args = parser.parse_args()
 raw_output = args.raw
 src_filename = args.vimdoc[0]
 src_dir = path.dirname(src_filename) or '.'
+src_basename = path.basename(src_filename)
+
+url_map = { src_basename: '' }
+for item in args.url_map:
+    filename, url = item.split('=', 1)
+    url_map[filename] = url
 
 # generate tags file
 subprocess.call([path.join(script_dir, 'helpztags'), src_dir])
@@ -84,7 +92,7 @@ if args.template is not None:
         template = template_file.read()
 
 # produce formatted html
-html = vimd2h.VimDoc2HTML(tags).to_html(contents)
+html = vimd2h.VimDoc2HTML(tags, url_map).to_html(contents)
 
 # output result
 with io.open(html_path, 'w', encoding='utf-8') as html_file:
@@ -92,6 +100,6 @@ with io.open(html_path, 'w', encoding='utf-8') as html_file:
         html_file.write(html)
     else:
         html_file.write(
-                template.format(title=path.basename(src_filename),
+                template.format(title=src_basename,
                                 style=style,
                                 html=html))

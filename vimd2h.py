@@ -71,7 +71,7 @@ class Link(object):
         self.link_plain = link_plain
 
 class VimDoc2HTML(object):
-    def __init__(self, tags, version=None):
+    def __init__(self, tags, url_map, version=None):
         self._urls = { }
         self._urlsCI = { }  # lowercased tag -> set of cased versions
         self._urlsUnresolved = set()
@@ -80,11 +80,16 @@ class VimDoc2HTML(object):
             m = RE_TAGLINE.match(line)
             if m:
                 tag, filename = m.group(1, 2)
-                self.do_add_tag(filename, tag)
 
-    def do_add_tag(self, filename, tag):
-        part1 = '<a href="#' + \
-                urllib.quote_plus(tag) + '"'
+                if filename not in url_map:
+                    url_map[filename] = '' # assume current URL
+                    print('Unmapped filename: "%s"' % filename)
+
+                self.do_add_tag(url_map[filename], tag)
+
+    def do_add_tag(self, url, tag):
+        part1 = '<a href="{url}#{anchor}"'.format(url=url,
+                                                  anchor=urllib.quote_plus(tag))
         part2 = '>' + html_escape[tag] + '</a>'
         link_pipe = part1 + ' class="l"' + part2
         classattr = ' class="d"'

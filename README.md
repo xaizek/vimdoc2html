@@ -30,6 +30,14 @@ in Vim's format are processed to produce HTML output.
 
 #### Options ####
 
+##### `-m,--map FILE=URL` option
+
+Associates a file path as found in `tags` file with a URL.  This option can be
+specified multiple times.  By default base name of the input file is mapped to
+an empty string (current URL in a browser).  All other unmapped file names in
+the `tags` file are mapped to an empty string and cause printing of a warning
+which can be used to adjust invocation.
+
 ##### `-o,--output path` option
 
 Specifies name of the output file.  The default behaviour is to derive it from
