@@ -21,6 +21,13 @@ or if the script is somewhere in the `$PATH`:
 vimdoc2html.py plugin.txt
 ```
 
+#### Operation ####
+
+As a first step, `helpztags` script is used to generate `tags` file similar to
+what Vim's `:helptags` command produces.  This is needed to know which
+references should be turned into hyperlinks.  Then the tags and documentation
+in Vim's format are processed to produce HTML output.
+
 #### Options ####
 
 ##### `-o,--output path` option
